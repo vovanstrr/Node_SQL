@@ -1,5 +1,6 @@
 // const {Brand} = require('../models/models')
-// const ApiError = require('../error/ApiError');
+const ApiError = require('../error/ApiError');
+const { Type } = require('../models/models');
 
 class ProductController {
     // async create(req, res) {
@@ -12,11 +13,29 @@ class ProductController {
         const brands = await Brand.findAll()
         return res.json(brands)
     }
-async check(req, res) {
-    const query = req.query
-    res.json(query)
-    
-}
+
+    async create(req, res) {
+        const body = req.body
+        const {name} = req.body
+        const type = await Type.create({name})
+        return res.json(type)
+        // res.json(body)
+
+        // const brands = await Brand.findAll()
+        // return res.json(brands)
+    }
+
+    async check(req, res, next) {
+        const {id} = req.query
+        if (!id) {
+            return next(ApiError.banRequest('Не задан ID'))
+        }
+        console.log(req.methdot);
+        console.log(req.headers);
+
+        res.json(id)
+
+    }
 }
 
 module.exports = new ProductController()
