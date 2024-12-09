@@ -1,44 +1,46 @@
 require('dotenv').config()
-
 const express = require('express')
-const { Sequelize } = require('sequelize');
-// const sequelize = require('./db')
+const sequelize = require('./db')
 const models = require('./models/models')
 const cors = require('cors')
+// const fileUpload = require('express-fileupload')
 const router = require('./routes/index')
 const errorHandler = require('./middleware/ErrorHandlingMiddleware')
+const path = require('path')
+
 const PORT = process.env.PORT || 5000
 
 const app = express()
 app.use(cors())
 app.use(express.json())
+app.use(express.static(path.resolve(__dirname, 'static')))
+// app.use(fileUpload({}))
 app.use('/api', router)
-//Обработка ошибок
+
+// Обработка ошибок, последний Middleware
 app.use(errorHandler)
 // app.get('/', (req, res) => {
         
 //     res.status(200).json({ message: 'Working!' })
 // })
 
-const sequelize = new Sequelize('online_store', 'postgres', 'secret', {
-    host: 'localhost',
-    dialect: 'postgres',
-});
+// const sequelize = new Sequelize('online_store', 'postgres', 'secret', {
+//     host: 'localhost',
+//     dialect: 'postgres',
+// });
 
 const start = async () => {
-
-
     try {
-        await sequelize.authenticate()
-        await sequelize.sync()
+        await sequelize.authenticate()  // Подключение к бд
+        // await sequelize.drop()
+        // console.log('Все таблицы были удалены.')
+        await sequelize.sync({ alter: true })   // сверка состояния бд со схемой данных  { force: true }
         app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
         console.log('Connection has been established successfully.');
 
     } catch (e) {
         console.log(e);
         console.log('error!!');
-
-
     }
 }
 
