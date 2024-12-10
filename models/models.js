@@ -12,6 +12,7 @@ const Shop = sequelize.define('shop', {
     name: {type: DataTypes.STRING, unique: true, allowNull: false},
 })
 
+
 // const Sale = sequelize.define('sale', {
 //     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 //     quantity: {type: DataTypes.INTEGER, allowNull: false},
@@ -74,7 +75,10 @@ const Shop = sequelize.define('shop', {
 
 // ----- описание связей между таблицами -----------
 
-Product.hasOne(Shop) // один к одному
+// Product.hasOne(Shop) // один к одному
+// Shop.belongsTo(Product) // принадлежит user
+
+Product.hasOne(Shop) // 
 Shop.belongsTo(Product) // принадлежит user
 
 // User.hasMany(Rating) // один ко многим

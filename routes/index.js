@@ -2,9 +2,9 @@ const Router = require('express')
 const router = new Router()
 
 const products = require('./products')
-// const stories = require('./stories')
+const shops = require('./shops')
 
 router.use('/products', products)
-// router.use('/stories', stories)
+router.use('/shop', shops)
 
 module.exports = router

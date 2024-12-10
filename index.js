@@ -32,9 +32,12 @@ app.use(errorHandler)
 const start = async () => {
     try {
         await sequelize.authenticate()  // Подключение к бд
-        // await sequelize.drop()
-        // console.log('Все таблицы были удалены.')
-        await sequelize.sync({ alter: true })   // сверка состояния бд со схемой данных  { force: true }
+        // await sequelize.drop()  // удаление всех таблиц
+        
+        // User.sync() - создает таблицу при отсутствии (существующая таблица остается неизменной)
+        // User.sync({ force: true }) - удаляет существующую таблицу и создает новую
+        // User.sync({ alter: true }) - приводит таблицу в соответствие с моделью
+        await sequelize.sync({ alter: true })   
         app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
         console.log('Connection has been established successfully.');
 
