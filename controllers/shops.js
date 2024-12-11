@@ -34,7 +34,7 @@ class ShopsController {
 
         const shop = await Shop.findByPk(id)
         shop.productid = id_product
-        shop.name += "123"
+        shop.name += "_1"
         await shop.save()
         return res.json(shop)
     }
