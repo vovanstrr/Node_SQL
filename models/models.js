@@ -12,6 +12,12 @@ const Shop = sequelize.define('shop', {
     name: {type: DataTypes.STRING, unique: true, allowNull: false},
 })
 
+const DeviceInfo = sequelize.define('device_info', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    title: {type: DataTypes.STRING, allowNull: false},
+    description: {type: DataTypes.STRING, allowNull: false},
+})
+
 
 // const Sale = sequelize.define('sale', {
 //     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
@@ -78,8 +84,11 @@ const Shop = sequelize.define('shop', {
 // Product.hasOne(Shop) // один к одному
 // Shop.belongsTo(Product) // принадлежит user
 
-Product.hasOne(Shop) // 
+Product.hasOne(Shop) //   , {as: 'shops', foreignKey: 'id'}
 Shop.belongsTo(Product) // принадлежит user
+
+Product.hasMany(DeviceInfo)
+DeviceInfo.belongsTo(Product)
 
 // User.hasMany(Rating) // один ко многим
 // Rating.belongsTo(User)

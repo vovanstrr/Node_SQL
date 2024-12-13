@@ -39,11 +39,12 @@ class ProductController {
             return next(ApiError.banRequest('Не задан ID'))
         }
         const product = await Product.findByPk(id)
+                
         if (product) {
             return res.json(product)
         } else {
-            console.log('Not found!')
-            
+            // console.log('Not found!')
+            return next(ApiError.banRequest('нет такой записи'))
         }
         // if (!plu) {
         //     return next(ApiError.banRequest('Не задан plu'))

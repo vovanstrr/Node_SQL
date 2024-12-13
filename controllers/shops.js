@@ -1,4 +1,4 @@
-const { Shop } = require('../models/models')
+const { Shop, Product } = require('../models/models')
 const ApiError = require('../error/ApiError');
 
 class ShopsController {
@@ -13,9 +13,14 @@ class ShopsController {
         if (!name) {
             return next(ApiError.banRequest('Не задан name'))
         }
+        try {
+            const product = await Shop.create({ name, plu })
+            return res.json(product)
+        } catch(e) {
+            // console.log('error! ', e.original.detail);
+            return next(ApiError.banRequest(e.original.detail))
+        }
 
-        const product = await Shop.create({ name, plu })
-        return res.json(product)
     }
 
     async getAll(req, res) {
@@ -33,10 +38,19 @@ class ShopsController {
         }
 
         const shop = await Shop.findByPk(id)
-        shop.productid = id_product
-        shop.name += "_1"
-        await shop.save()
-        return res.json(shop)
+        const product = await Product.findByPk(id_product)
+        if (shop && product) {
+            // shop.productid = product.id    
+            await product.setShop(shop) //create
+            return res.json(shop)
+        } else {
+            return next(ApiError.banRequest('ошибка сохранения...'))
+        }
+        // console.log('shop.productid ', typeof(shop.productid));
+        // shop.productid = id_product
+        // shop.name += "_1"
+        // await shop.save()
+        
     }
 
 }
