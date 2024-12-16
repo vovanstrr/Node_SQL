@@ -84,11 +84,11 @@ const DeviceInfo = sequelize.define('device_info', {
 // Product.hasOne(Shop) // один к одному
 // Shop.belongsTo(Product) // принадлежит user
 
-Product.hasOne(Shop) //   , {as: 'shops', foreignKey: 'id'}
-Shop.belongsTo(Product) // принадлежит user
+Shop.hasOne(Product) //   , {as: 'shops', foreignKey: 'id'}
+Product.belongsTo(Shop) // принадлежит user
 
-Product.hasMany(DeviceInfo)
-DeviceInfo.belongsTo(Product)
+DeviceInfo.hasMany(Product)
+Product.belongsTo(DeviceInfo)
 
 // User.hasMany(Rating) // один ко многим
 // Rating.belongsTo(User)

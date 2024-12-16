@@ -6,8 +6,9 @@ const ProductController = require('../controllers/products')
 // }) //products.create
 router.post('/create', ProductController.create) 
 router.get('/getall', ProductController.getAll)
-router.get('/get', ProductController.get)
+// router.get('/get', ProductController.get)
 
+router.post('/setshop', ProductController.setShop) 
 router.get('/find', ProductController.check)
 
 // router.post('/saleplus', products.create)

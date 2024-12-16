@@ -1,53 +1,104 @@
 // const {Brand} = require('../models/models')
 const ApiError = require('../error/ApiError');
-const { Product } = require('../models/models');
+const { Product, Shop } = require('../models/models');
 
 class ProductController {
-    // async create(req, res) {
-    //     const {name} = req.body
-    //     const brand = await Brand.create({name})
-    //     return res.json(brand)
-    // }
 
     async getAll(req, res) {
-        const products = await Product.findAll()
+        const { id, plu, name, id_shop } = req.query
+        let products;
+        if (!id && !plu && !name && !id_shop) {
+            products = await Product.findAll()
+        }
+        if (id && !plu && !name) {
+            products = await Product.findAll({where: {id}}) 
+        }
+        if (!id && plu && !name) {
+            products = await Product.findAll({where: {plu}}) 
+        }
+        if (!id && !plu && name) {
+            products = await Product.findAll({where: {name}}) 
+        }
+        if (!id && !plu && !name && id_shop) {
+            products = await Product.findAll({where: {id_shop}}) 
+        }
+        
         return res.json(products)
     }
 
-    async get(req, res) {
-        const { id_prod } = req.query
-        if (id_prod) {
-            const product = await Product.findByPk(id_prod)
-        }
-        return res.json(product)
-    }
+    // async get(req, res, next) {
+    //     const { id } = req.query
+    //     if (id) {
+    //         const product = await Product.findByPk(id)
+    //         if (!product) {
+    //             return next(ApiError.banRequest('Не найнен продукт'))
+    //         } else {
+    //             return res.json(product)
+    //         }
+    //     } else {
+    //         return next(ApiError.banRequest('Не задан id')) 
+    //     }
+    // } 
 
     async create(req, res, next) {
         // const body = req.body
-        const {name, plu} = req.body
+        const { name, plu, id_shop } = req.body
         if (!plu) {
             return next(ApiError.banRequest('Не задан plu'))
         }
         if (!name) {
             return next(ApiError.banRequest('Не задан name'))
         }
-        
-        const product = await Product.create({name, plu})
-        return res.json(product)
-        // res.json(body)
+        if (!name && !plu) {
+            return next(ApiError.banRequest('Не задан name и plu'))
+        }
 
-        // const brands = await Brand.findAll()
-        // return res.json(brands)
+        const product = await Product.create({ name, plu })
+        if (id_shop) {
+            const shop = await Shop.findByPk(id_shop)
+            if (shop) {
+                await product.setShop(shop)
+                return res.json(product)
+            }
+        }
+        return res.json(product)
+    }
+
+    async setShop(req, res, next) {
+        const { id, name, plu, id_shop } = req.body
+        if (id && id_shop) {
+            const product = await Product.findByPk(id)
+            if (product) {
+                const shop = await Shop.findByPk(id_shop)
+                if (shop) {
+                    await product.setShop(shop)
+                    return res.json(product)
+                } else {
+                    return next(ApiError.banRequest(`нет такой записи id_shop ${id_shop}`))    
+                }
+                return res.json(product)
+            } else {
+                // console.log('Not found!')
+                return next(ApiError.banRequest(`нет такой записи id ${id}`))
+            }
+        } else {
+            return next(ApiError.banRequest(`нет указан id или id_shop`))
+        }
+    }
+
+    async getShop(req, res, next) {
+        const { id } = req.body
+        
     }
 
     async check(req, res, next) {
-        const {id} = req.query
-        
+        const { id } = req.query
+
         if (!id) {
             return next(ApiError.banRequest('Не задан ID'))
         }
         const product = await Product.findByPk(id)
-                
+
         if (product) {
             return res.json(product)
         } else {
@@ -59,8 +110,6 @@ class ProductController {
         // }
         // console.log(req.methdot);
         // console.log(req.headers);
-
-        
 
     }
 }
