@@ -14,6 +14,14 @@ class ProductController {
         return res.json(products)
     }
 
+    async get(req, res) {
+        const { id_prod } = req.query
+        if (id_prod) {
+            const product = await Product.findByPk(id_prod)
+        }
+        return res.json(product)
+    }
+
     async create(req, res, next) {
         // const body = req.body
         const {name, plu} = req.body

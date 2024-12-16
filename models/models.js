@@ -116,7 +116,7 @@ DeviceInfo.belongsTo(Product)
 
 module.exports = {
     Product,
-    Shop
+    Shop,
     // User,
     // Basket,
     // BasketDevice,
@@ -125,5 +125,5 @@ module.exports = {
     // Brand,
     // Rating,
     // TypeBrand,
-    // DeviceInfo
+    DeviceInfo
 }
