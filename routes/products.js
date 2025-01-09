@@ -9,6 +9,8 @@ router.get('/getall', ProductController.getAll)
 // router.get('/get', ProductController.get)
 
 router.post('/setshop', ProductController.setShop) 
+// router.get('/viewshop', ProductController.viewShop) 
+
 router.get('/find', ProductController.check)
 
 // router.post('/saleplus', products.create)

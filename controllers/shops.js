@@ -28,6 +28,18 @@ class ShopsController {
         return res.json(shop)
     }
 
+    async viewProd(req, res, next) {
+        const { id } = req.query
+
+        if (id) {
+        const shop = await Shop.findAll({where: {id}}) 
+        const product = await shop.getShop().name
+        return res.json(shop)
+        } else {
+        return next(ApiError.banRequest(`нет такой записи id_shop ${id_shop}`)) 
+        }
+    }
+
     async patch(req, res, next) {
         const { id, id_product } = req.body
         if (!id) {

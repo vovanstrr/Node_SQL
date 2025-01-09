@@ -2,6 +2,10 @@
 const ApiError = require('../error/ApiError');
 const { Product, Shop } = require('../models/models');
 
+// const { VM } = require('vm2');
+// const vm = new VM();
+// vm.run("console.log('Выполнение в песочнице');"); // Выполнение в песочнице
+
 class ProductController {
 
     async getAll(req, res) {
@@ -86,10 +90,6 @@ class ProductController {
         }
     }
 
-    async getShop(req, res, next) {
-        const { id } = req.body
-        
-    }
 
     async check(req, res, next) {
         const { id } = req.query
